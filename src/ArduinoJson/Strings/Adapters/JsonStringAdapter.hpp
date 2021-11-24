@@ -5,23 +5,16 @@
 #pragma once
 
 #include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/IsString.hpp>
 #include <ArduinoJson/Strings/String.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {
 
+inline RamStringAdapter adaptString(const String& s) {
+  return RamStringAdapter(s.c_str(), s.size());
+}
+
 template <>
-class StringAdapter<String> : public StringAdapter<char*> {
- public:
-  StringAdapter(const String& str)
-      : StringAdapter<char*>(str.c_str()), _isStatic(str.isStatic()) {}
+struct IsString<String> : true_type {};
 
-  bool isStatic() const {
-    return _isStatic;
-  }
-
-  typedef storage_policies::decide_at_runtime storage_policy;
-
- private:
-  bool _isStatic;
-};
 }  // namespace ARDUINOJSON_NAMESPACE

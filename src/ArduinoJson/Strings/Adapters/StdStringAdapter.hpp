@@ -4,48 +4,17 @@
 
 #pragma once
 
-#include <ArduinoJson/Namespace.hpp>
-#include <ArduinoJson/Strings/StoragePolicy.hpp>
-#include <ArduinoJson/Strings/StringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
 
 #include <string>
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <typename TCharTraits, typename TAllocator>
-class StringAdapter<std::basic_string<char, TCharTraits, TAllocator> > {
- public:
-  typedef std::basic_string<char, TCharTraits, TAllocator> string_type;
+inline RamStringAdapter adaptString(const std::string& s) {
+  return RamStringAdapter(s.c_str(), s.size());
+}
 
-  StringAdapter(const string_type& str) : _str(&str) {}
-
-  void copyTo(char* p, size_t n) const {
-    memcpy(p, _str->c_str(), n);
-  }
-
-  bool isNull() const {
-    return false;
-  }
-
-  int compare(const char* other) const {
-    if (!other)
-      return 1;
-    return _str->compare(other);
-  }
-
-  char operator[](size_t i) const {
-    ARDUINOJSON_ASSERT(i <= size());
-    return _str->operator[](i);
-  }
-
-  size_t size() const {
-    return _str->size();
-  }
-
-  typedef storage_policies::store_by_copy storage_policy;
-
- private:
-  const string_type* _str;
-};
+template <>
+struct IsString<std::string> : true_type {};
 
 }  // namespace ARDUINOJSON_NAMESPACE

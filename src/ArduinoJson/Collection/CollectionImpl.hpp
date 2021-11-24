@@ -34,11 +34,12 @@ inline VariantData* CollectionData::addElement(MemoryPool* pool) {
   return slotData(addSlot(pool));
 }
 
-template <typename TAdaptedString>
+template <typename TAdaptedString, typename TStoragePolicy>
 inline VariantData* CollectionData::addMember(TAdaptedString key,
-                                              MemoryPool* pool) {
+                                              MemoryPool* pool,
+                                              TStoragePolicy storage) {
   VariantSlot* slot = addSlot(pool);
-  if (!slotSetKey(slot, key, pool)) {
+  if (!slotSetKey(slot, key, pool, storage)) {
     removeSlot(slot);
     return 0;
   }
@@ -62,9 +63,11 @@ inline bool CollectionData::copyFrom(const CollectionData& src,
     VariantData* var;
     if (s->key() != 0) {
       if (s->ownsKey())
-        var = addMember(adaptString(const_cast<char*>(s->key())), pool);
+        var = addMember(adaptString(const_cast<char*>(s->key())), pool,
+                        storage_policies::store_by_copy());
       else
-        var = addMember(adaptString(s->key()), pool);
+        var = addMember(adaptString(s->key()), pool,
+                        storage_policies::store_by_address());
     } else {
       var = addElement(pool);
     }
@@ -137,9 +140,9 @@ inline VariantData* CollectionData::getMember(TAdaptedString key) const {
   return slot ? slot->data() : 0;
 }
 
-template <typename TAdaptedString>
-inline VariantData* CollectionData::getOrAddMember(TAdaptedString key,
-                                                   MemoryPool* pool) {
+template <typename TAdaptedString, typename TStoragePolicy>
+inline VariantData* CollectionData::getOrAddMember(
+    TAdaptedString key, MemoryPool* pool, TStoragePolicy storage_policy) {
   // ignore null key
   if (key.isNull())
     return 0;
@@ -149,7 +152,7 @@ inline VariantData* CollectionData::getOrAddMember(TAdaptedString key,
   if (slot)
     return slot->data();
 
-  return addMember(key, pool);
+  return addMember(key, pool, storage_policy);
 }
 
 inline VariantData* CollectionData::getElement(size_t index) const {

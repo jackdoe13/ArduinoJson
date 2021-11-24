@@ -4,16 +4,16 @@
 
 #pragma once
 
-#include <ArduinoJson/Polyfills/pgmspace.hpp>
-#include <ArduinoJson/Strings/StoragePolicy.hpp>
-#include <ArduinoJson/Strings/StringAdapter.hpp>
+#include <Arduino.h>
+
+#include <ArduinoJson/Strings/IsString.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <>
-class StringAdapter<const __FlashStringHelper*> {
+class FlashStringAdapter {
  public:
-  StringAdapter(const __FlashStringHelper* str) : _str(str) {}
+  FlashStringAdapter(const __FlashStringHelper* str, size_t sz)
+      : _str(str), _size(sz) {}
 
   int compare(const char* other) const {
     if (!other && !_str)
@@ -22,7 +22,7 @@ class StringAdapter<const __FlashStringHelper*> {
       return -1;
     if (!other)
       return 1;
-    return -strcmp_P(other, reinterpret_cast<const char*>(_str));
+    return -strncmp_P(other, reinterpret_cast<const char*>(_str), _size);
   }
 
   bool isNull() const {
@@ -33,23 +33,32 @@ class StringAdapter<const __FlashStringHelper*> {
     memcpy_P(p, reinterpret_cast<const char*>(_str), n);
   }
 
-  size_t size() const {
-    if (!_str)
-      return 0;
-    return strlen_P(reinterpret_cast<const char*>(_str));
-  }
-
   char operator[](size_t i) const {
     ARDUINOJSON_ASSERT(_str != 0);
-    ARDUINOJSON_ASSERT(i <= size());
+    ARDUINOJSON_ASSERT(i <= _size);
     return static_cast<char>(
         pgm_read_byte(reinterpret_cast<const char*>(_str) + i));
   }
 
-  typedef storage_policies::store_by_copy storage_policy;
+  size_t size() const {
+    return _size;
+  }
 
  private:
   const __FlashStringHelper* _str;
+  size_t _size;
 };
+
+inline FlashStringAdapter adaptString(const __FlashStringHelper* s) {
+  return FlashStringAdapter(s,
+                            s ? strlen_P(reinterpret_cast<const char*>(s)) : 0);
+}
+
+inline FlashStringAdapter adaptString(const __FlashStringHelper* s, size_t n) {
+  return FlashStringAdapter(s, n);
+}
+
+template <>
+struct IsString<const __FlashStringHelper*> : true_type {};
 
 }  // namespace ARDUINOJSON_NAMESPACE

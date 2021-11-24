@@ -6,51 +6,23 @@
 
 #include <Arduino.h>
 
-#include <ArduinoJson/Polyfills/safe_strcmp.hpp>
-#include <ArduinoJson/Strings/StoragePolicy.hpp>
-#include <ArduinoJson/Strings/StringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/IsString.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <>
-class StringAdapter< ::String> {
- public:
-  StringAdapter(const ::String& str) : _str(&str) {}
+inline RamStringAdapter adaptString(const ::String& s) {
+  return RamStringAdapter(s.c_str(), s.size());
+}
 
-  void copyTo(char* p, size_t n) const {
-    memcpy(p, _str->c_str(), n);
-  }
-
-  bool isNull() const {
-    // Arduino's String::c_str() can return NULL
-    return !_str->c_str();
-  }
-
-  int compare(const char* other) const {
-    // Arduino's String::c_str() can return NULL
-    const char* me = _str->c_str();
-    return safe_strcmp(me, other);
-  }
-
-  char operator[](size_t i) const {
-    ARDUINOJSON_ASSERT(_str != 0);
-    return _str->operator[](static_cast<unsigned int>(i));
-  }
-
-  size_t size() const {
-    return _str->length();
-  }
-
-  typedef storage_policies::store_by_copy storage_policy;
-
- private:
-  const ::String* _str;
-};
+inline RamStringAdapter adaptString(const ::StringSumHelper& s) {
+  return RamStringAdapter(s.c_str(), s.size());
+}
 
 template <>
-class StringAdapter< ::StringSumHelper> : public StringAdapter< ::String> {
- public:
-  StringAdapter(const ::String& s) : StringAdapter< ::String>(s) {}
-};
+struct IsString<String> : true_type {};
+
+template <>
+struct IsString<StringSumHelper> : true_type {};
 
 }  // namespace ARDUINOJSON_NAMESPACE

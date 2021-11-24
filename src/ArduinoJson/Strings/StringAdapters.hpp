@@ -4,10 +4,8 @@
 
 #pragma once
 
-#include <ArduinoJson/Strings/Adapters/ConstRamStringAdapter.hpp>
 #include <ArduinoJson/Strings/Adapters/JsonStringAdapter.hpp>
 #include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
-#include <ArduinoJson/Strings/Adapters/SizedRamStringAdapter.hpp>
 
 #if ARDUINOJSON_ENABLE_STD_STRING
 #  include <ArduinoJson/Strings/Adapters/StdStringAdapter.hpp>
@@ -23,5 +21,4 @@
 
 #if ARDUINOJSON_ENABLE_PROGMEM
 #  include <ArduinoJson/Strings/Adapters/FlashStringAdapter.hpp>
-#  include <ArduinoJson/Strings/Adapters/SizedFlashStringAdapter.hpp>
 #endif

@@ -109,7 +109,7 @@ class VariantData {
         return storeString(
             adaptString(const_cast<char *>(src._content.asString.data),
                         src._content.asString.size),
-            pool);
+            pool, storage_policies::store_by_copy());
       case VALUE_IS_OWNED_RAW:
         return storeOwnedRaw(
             serialized(src._content.asString.data, src._content.asString.size),
@@ -242,11 +242,6 @@ class VariantData {
     _content.asString.size = s.size();
   }
 
-  template <typename TAdaptedString>
-  bool storeString(TAdaptedString value, MemoryPool *pool) {
-    return storeString(value, pool, typename TAdaptedString::storage_policy());
-  }
-
   CollectionData &toArray() {
     setType(VALUE_IS_ARRAY);
     _content.asCollection.clear();
@@ -307,13 +302,14 @@ class VariantData {
     return isObject() ? _content.asCollection.getMember(key) : 0;
   }
 
-  template <typename TAdaptedString>
-  VariantData *getOrAddMember(TAdaptedString key, MemoryPool *pool) {
+  template <typename TAdaptedString, typename TStoragePolicy>
+  VariantData *getOrAddMember(TAdaptedString key, MemoryPool *pool,
+                              TStoragePolicy storage_policy) {
     if (isNull())
       toObject();
     if (!isObject())
       return 0;
-    return _content.asCollection.getOrAddMember(key, pool);
+    return _content.asCollection.getOrAddMember(key, pool, storage_policy);
   }
 
   void movePointers(ptrdiff_t stringDistance, ptrdiff_t variantDistance) {
@@ -325,12 +321,6 @@ class VariantData {
 
   uint8_t type() const {
     return _flags & VALUE_MASK;
-  }
-
- private:
-  void setType(uint8_t t) {
-    _flags &= OWNED_KEY_BIT;
-    _flags |= t;
   }
 
   template <typename TAdaptedString>
@@ -366,6 +356,12 @@ class VariantData {
     }
     setString(CopiedString(copy, value.size()));
     return true;
+  }
+
+ private:
+  void setType(uint8_t t) {
+    _flags &= OWNED_KEY_BIT;
+    _flags |= t;
   }
 };
 

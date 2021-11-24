@@ -12,4 +12,14 @@ struct store_by_copy {};
 struct decide_at_runtime {};
 }  // namespace storage_policies
 
+template <typename>
+struct storage_policy_for {
+  typedef storage_policies::store_by_copy type;
+};
+
+template <>
+struct storage_policy_for<const char*> {
+  typedef storage_policies::store_by_address type;
+};
+
 }  // namespace ARDUINOJSON_NAMESPACE
