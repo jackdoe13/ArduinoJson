@@ -153,7 +153,8 @@ inline typename enable_if<IsString<T>::value, bool>::type convertToJson(
     const T& src, VariantRef dst) {
   VariantData* data = getData(dst);
   MemoryPool* pool = getPool(dst);
-  return variantSetString(data, adaptString(src), pool);
+  return variantSetString(data, adaptString(src), pool,
+                          typename storage_policy_for<T>::type());
 }
 
 template <>

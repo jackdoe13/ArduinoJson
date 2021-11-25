@@ -253,7 +253,10 @@ class JsonDocument : public Visitable {
   // getOrAddMember(const String&)
   template <typename TString>
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) {
-    return VariantRef(&_pool, _data.getOrAddMember(adaptString(key), &_pool));
+    return VariantRef(
+        &_pool,
+        _data.getOrAddMember(adaptString(key), &_pool,
+                             typename storage_policy_for<TString>::type()));
   }
 
   FORCE_INLINE VariantRef addElement() {
