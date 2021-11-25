@@ -325,8 +325,8 @@ class VariantData {
 
   template <typename TAdaptedString>
   inline bool storeString(TAdaptedString value, MemoryPool *pool,
-                          storage_policies::decide_at_runtime) {
-    if (value.isStatic())
+                          storage_policies::decide_at_runtime storage_policy) {
+    if (storage_policy.store_by_address)
       return storeString(value, pool, storage_policies::store_by_address());
     else
       return storeString(value, pool, storage_policies::store_by_copy());

@@ -49,6 +49,12 @@ class RamStringAdapter {
   size_t _size;
 };
 
+template <>
+struct IsString<const char*> : true_type {};
+
+template <>
+struct IsString<char*> : true_type {};
+
 inline RamStringAdapter adaptString(const char* s) {
   return RamStringAdapter(s, s ? strlen(s) : 0);
 }
@@ -58,17 +64,24 @@ inline RamStringAdapter adaptString(const char* s, size_t n) {
 }
 
 template <int N>
+struct IsString<char[N]> : true_type {};
+
+template <int N>
 inline RamStringAdapter adaptString(char s[N]) {
   return RamStringAdapter(s, strlen(s));
 }
 
 template <>
-struct IsString<const char*> : true_type {};
+struct IsString<unsigned char*> : true_type {};
+
+inline RamStringAdapter adaptString(const unsigned char* s) {
+  return adaptString(reinterpret_cast<const char*>(s));
+}
 
 template <>
-struct IsString<char*> : true_type {};
+struct IsString<signed char*> : true_type {};
 
-template <int N>
-struct IsString<char[N]> : true_type {};
-
+inline RamStringAdapter adaptString(const signed char* s) {
+  return adaptString(reinterpret_cast<const char*>(s));
+}
 }  // namespace ARDUINOJSON_NAMESPACE

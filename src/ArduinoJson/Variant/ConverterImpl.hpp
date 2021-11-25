@@ -134,7 +134,7 @@ template <>
 struct Converter<String> {
   static void toJson(String src, VariantRef dst) {
     variantSetString(getData(dst), adaptString(src), getPool(dst),
-                     storage_policies::store_by_copy());
+                     storage_policies::decide_at_runtime(src.isStatic()));
   }
 
   static String fromJson(VariantConstRef src) {

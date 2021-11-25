@@ -4,12 +4,17 @@
 
 #pragma once
 
+#include <ArduinoJson/Strings/String.hpp>
+
 namespace ARDUINOJSON_NAMESPACE {
 
 namespace storage_policies {
 struct store_by_address {};
 struct store_by_copy {};
-struct decide_at_runtime {};
+struct decide_at_runtime {
+  decide_at_runtime(bool x) : store_by_address(x) {}
+  bool store_by_address;
+};
 }  // namespace storage_policies
 
 template <typename>
