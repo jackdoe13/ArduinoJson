@@ -6,6 +6,7 @@
 
 #include <Arduino.h>
 
+#include <ArduinoJson/Polyfills/pgmspace.hpp>
 #include <ArduinoJson/Strings/IsString.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {

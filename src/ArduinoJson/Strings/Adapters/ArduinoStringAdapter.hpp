@@ -12,17 +12,13 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 inline RamStringAdapter adaptString(const ::String& s) {
-  return RamStringAdapter(s.c_str(), s.size());
-}
-
-inline RamStringAdapter adaptString(const ::StringSumHelper& s) {
-  return RamStringAdapter(s.c_str(), s.size());
+  return RamStringAdapter(s.c_str(), s.length());
 }
 
 template <>
-struct IsString<String> : true_type {};
+struct IsString< ::String> : true_type {};
 
 template <>
-struct IsString<StringSumHelper> : true_type {};
+struct IsString< ::StringSumHelper> : true_type {};
 
 }  // namespace ARDUINOJSON_NAMESPACE

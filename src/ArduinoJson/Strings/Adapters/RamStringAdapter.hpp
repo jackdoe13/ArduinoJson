@@ -67,6 +67,9 @@ template <int N>
 struct IsString<char[N]> : true_type {};
 
 template <int N>
+struct IsString<const char[N]> : true_type {};
+
+template <int N>
 inline RamStringAdapter adaptString(char s[N]) {
   return RamStringAdapter(s, strlen(s));
 }

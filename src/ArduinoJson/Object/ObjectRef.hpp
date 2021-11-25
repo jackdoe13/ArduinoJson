@@ -195,8 +195,9 @@ class ObjectRef : public ObjectRefBase<CollectionData>,
   // getOrAddMember(const String&) const
   template <typename TString>
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) const {
-    return VariantRef(_pool,
-                      objectGetOrAddMember(_data, adaptString(key), _pool));
+    return VariantRef(_pool, objectGetOrAddMember(
+                                 _data, adaptString(key), _pool,
+                                 typename storage_policy_for<TString>::type()));
   }
 
   // getOrAddMember(char*) const

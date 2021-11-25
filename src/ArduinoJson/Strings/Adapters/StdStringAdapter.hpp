@@ -10,11 +10,14 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline RamStringAdapter adaptString(const std::string& s) {
+template <typename TCharTraits, typename TAllocator>
+inline RamStringAdapter adaptString(
+    const std::basic_string<char, TCharTraits, TAllocator>& s) {
   return RamStringAdapter(s.c_str(), s.size());
 }
 
-template <>
-struct IsString<std::string> : true_type {};
+template <typename TCharTraits, typename TAllocator>
+struct IsString<std::basic_string<char, TCharTraits, TAllocator> > : true_type {
+};
 
 }  // namespace ARDUINOJSON_NAMESPACE

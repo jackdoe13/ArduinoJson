@@ -17,7 +17,7 @@ using namespace ARDUINOJSON_NAMESPACE;
 
 TEST_CASE("const char*") {
   SECTION("null") {
-    StringAdapter<const char*> adapter(NULL);
+    RamStringAdapter adapter = adaptString(static_cast<const char*>(0));
 
     CHECK(adapter.compare("bravo") < 0);
     CHECK(adapter.compare(NULL) == 0);
@@ -26,7 +26,7 @@ TEST_CASE("const char*") {
   }
 
   SECTION("non-null") {
-    StringAdapter<const char*> adapter("bravo");
+    RamStringAdapter adapter = adaptString("bravo");
 
     CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
@@ -39,7 +39,7 @@ TEST_CASE("const char*") {
 
 TEST_CASE("const char* + size") {
   SECTION("null") {
-    StringAdapter<const char*, true> adapter(NULL, 10);
+    RamStringAdapter adapter = adaptString(static_cast<const char*>(0), 10);
 
     CHECK(adapter.compare("bravo") < 0);
     CHECK(adapter.compare(NULL) == 0);
@@ -48,7 +48,7 @@ TEST_CASE("const char* + size") {
   }
 
   SECTION("non-null") {
-    StringAdapter<const char*, true> adapter("bravo", 5);
+    RamStringAdapter adapter = adaptString("bravo", 5);
 
     CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
@@ -61,7 +61,8 @@ TEST_CASE("const char* + size") {
 
 TEST_CASE("const __FlashStringHelper*") {
   SECTION("null") {
-    StringAdapter<const __FlashStringHelper*> adapter(NULL);
+    FlashStringAdapter adapter =
+        adaptString(static_cast<const __FlashStringHelper*>(0));
 
     CHECK(adapter.compare("bravo") < 0);
     CHECK(adapter.compare(NULL) == 0);
@@ -70,7 +71,7 @@ TEST_CASE("const __FlashStringHelper*") {
   }
 
   SECTION("non-null") {
-    StringAdapter<const __FlashStringHelper*> adapter = adaptString(F("bravo"));
+    FlashStringAdapter adapter = adaptString(F("bravo"));
 
     CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
@@ -83,7 +84,7 @@ TEST_CASE("const __FlashStringHelper*") {
 
 TEST_CASE("std::string") {
   std::string str("bravo");
-  StringAdapter<std::string> adapter(str);
+  RamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
@@ -95,7 +96,7 @@ TEST_CASE("std::string") {
 
 TEST_CASE("Arduino String") {
   ::String str("bravo");
-  StringAdapter< ::String> adapter(str);
+  RamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
@@ -107,7 +108,7 @@ TEST_CASE("Arduino String") {
 
 TEST_CASE("custom_string") {
   custom_string str("bravo");
-  StringAdapter<custom_string> adapter(str);
+  RamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
