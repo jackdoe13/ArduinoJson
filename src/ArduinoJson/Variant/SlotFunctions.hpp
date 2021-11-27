@@ -11,8 +11,8 @@ namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TAdaptedString>
 inline bool slotSetKey(VariantSlot* var, TAdaptedString key, MemoryPool* pool,
-                       storage_policies::decide_at_runtime) {
-  if (key.isStatic()) {
+                       storage_policies::decide_at_runtime storagePolicy) {
+  if (storagePolicy.store_by_address) {
     return slotSetKey(var, key, pool, storage_policies::store_by_address());
   } else {
     return slotSetKey(var, key, pool, storage_policies::store_by_copy());

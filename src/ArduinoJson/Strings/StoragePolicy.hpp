@@ -17,14 +17,13 @@ struct decide_at_runtime {
 };
 }  // namespace storage_policies
 
-template <typename>
-struct storage_policy_for {
-  typedef storage_policies::store_by_copy type;
-};
+template <typename T>
+inline storage_policies::store_by_copy getStoragePolicy(const T&) {
+  return storage_policies::store_by_copy();
+}
 
-template <>
-struct storage_policy_for<const char*> {
-  typedef storage_policies::store_by_address type;
-};
+inline storage_policies::store_by_address getStoragePolicy(const char*) {
+  return storage_policies::store_by_address();
+}
 
 }  // namespace ARDUINOJSON_NAMESPACE

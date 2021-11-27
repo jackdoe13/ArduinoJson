@@ -89,8 +89,7 @@ NO_INLINE VariantData *variantGetOrAddMember(VariantData *var, TChar *key,
                                              MemoryPool *pool) {
   if (!var)
     return 0;
-  return var->getOrAddMember(adaptString(key), pool,
-                             typename storage_policy_for<TChar *>::type());
+  return var->getOrAddMember(adaptString(key), pool, getStoragePolicy(key));
 }
 
 template <typename TString>
@@ -99,8 +98,7 @@ NO_INLINE VariantData *variantGetOrAddMember(VariantData *var,
                                              MemoryPool *pool) {
   if (!var)
     return 0;
-  return var->getOrAddMember(adaptString(key), pool,
-                             typename storage_policy_for<TString>::type());
+  return var->getOrAddMember(adaptString(key), pool, getStoragePolicy(key));
 }
 
 inline bool variantIsNull(const VariantData *var) {

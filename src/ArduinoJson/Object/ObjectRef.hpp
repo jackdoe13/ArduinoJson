@@ -195,9 +195,9 @@ class ObjectRef : public ObjectRefBase<CollectionData>,
   // getOrAddMember(const String&) const
   template <typename TString>
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) const {
-    return VariantRef(_pool, objectGetOrAddMember(
-                                 _data, adaptString(key), _pool,
-                                 typename storage_policy_for<TString>::type()));
+    return VariantRef(_pool,
+                      objectGetOrAddMember(_data, adaptString(key), _pool,
+                                           getStoragePolicy(key)));
   }
 
   // getOrAddMember(char*) const
@@ -205,9 +205,9 @@ class ObjectRef : public ObjectRefBase<CollectionData>,
   // getOrAddMember(const __FlashStringHelper*) const
   template <typename TChar>
   FORCE_INLINE VariantRef getOrAddMember(TChar* key) const {
-    return VariantRef(_pool, objectGetOrAddMember(
-                                 _data, adaptString(key), _pool,
-                                 typename storage_policy_for<TChar*>::type()));
+    return VariantRef(_pool,
+                      objectGetOrAddMember(_data, adaptString(key), _pool,
+                                           getStoragePolicy(key)));
   }
 
   FORCE_INLINE bool operator==(ObjectRef rhs) const {

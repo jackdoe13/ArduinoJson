@@ -244,19 +244,16 @@ class JsonDocument : public Visitable {
   // getOrAddMember(const __FlashStringHelper*)
   template <typename TChar>
   FORCE_INLINE VariantRef getOrAddMember(TChar* key) {
-    return VariantRef(&_pool, _data.getOrAddMember(
-                                  adaptString(key), &_pool,
-                                  typename storage_policy_for<TChar*>::type()));
+    return VariantRef(&_pool, _data.getOrAddMember(adaptString(key), &_pool,
+                                                   getStoragePolicy(key)));
   }
 
   // getOrAddMember(const std::string&)
   // getOrAddMember(const String&)
   template <typename TString>
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) {
-    return VariantRef(
-        &_pool,
-        _data.getOrAddMember(adaptString(key), &_pool,
-                             typename storage_policy_for<TString>::type()));
+    return VariantRef(&_pool, _data.getOrAddMember(adaptString(key), &_pool,
+                                                   getStoragePolicy(key)));
   }
 
   FORCE_INLINE VariantRef addElement() {
