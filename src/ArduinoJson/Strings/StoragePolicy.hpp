@@ -11,48 +11,57 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 namespace storage_policies {
-// TODO: memory pool as a member?
-struct store_by_address {
+class store_by_address {
+ public:
   template <typename TAdaptedString, typename TCallback>
-  bool store(TAdaptedString str, MemoryPool *,
-             TCallback callback) {  // TODO: test pass by ref
+  bool store(TAdaptedString str, TCallback callback) {
     return callback(LinkedString(str.data(), str.size()));
   }
 };
 
-struct store_by_copy {
-  typedef CopiedString TResult;
+class store_by_copy {
+ public:
+  store_by_copy(MemoryPool *pool) : _pool(pool) {}
 
   template <typename TAdaptedString, typename TCallback>
-  bool store(TAdaptedString str, MemoryPool *pool, TCallback callback);
+  bool store(TAdaptedString str, TCallback callback);
+
+ private:
+  MemoryPool *_pool;
 };
 
-struct decide_at_runtime : private store_by_address, store_by_copy {
-  decide_at_runtime(bool x) : store_by_address(x) {}
-  bool store_by_address;
+class decide_at_runtime : store_by_address, store_by_copy {
+ public:
+  decide_at_runtime(MemoryPool *pool, bool isStatic)
+      : store_by_copy(pool), _isStatic(isStatic) {}
 
   template <typename TAdaptedString, typename TCallback>
-  bool store(TAdaptedString str, MemoryPool *pool,
-             TCallback callback) {  // TODO: test pass by ref
-    if (store_by_address)
-      return store_by_address::store(str, pool, callback);
+  bool store(TAdaptedString str, TCallback callback) {
+    if (_isStatic)
+      return store_by_address::store(str, callback);
     else
-      return store_by_copy::store(str, pool, callback);
+      return store_by_copy::store(str, callback);
   }
+
+ private:
+  bool _isStatic;
 };
 }  // namespace storage_policies
 
 template <typename T>
-inline storage_policies::store_by_copy getStoragePolicy(const T &) {
-  return storage_policies::store_by_copy();
+inline storage_policies::store_by_copy getStoragePolicy(const T &,
+                                                        MemoryPool *pool) {
+  return storage_policies::store_by_copy(pool);
 }
 
-inline storage_policies::store_by_address getStoragePolicy(const char *) {
+inline storage_policies::store_by_address getStoragePolicy(const char *,
+                                                           MemoryPool *) {
   return storage_policies::store_by_address();
 }
 
-inline storage_policies::decide_at_runtime getStoragePolicy(const String &s) {
-  return storage_policies::decide_at_runtime(s.isStatic());
+inline storage_policies::decide_at_runtime getStoragePolicy(const String &s,
+                                                            MemoryPool *pool) {
+  return storage_policies::decide_at_runtime(pool, s.isStatic());
 }
 
 }  // namespace ARDUINOJSON_NAMESPACE

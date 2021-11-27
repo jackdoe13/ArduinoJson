@@ -197,7 +197,7 @@ class ObjectRef : public ObjectRefBase<CollectionData>,
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) const {
     return VariantRef(_pool,
                       objectGetOrAddMember(_data, adaptString(key), _pool,
-                                           getStoragePolicy(key)));
+                                           getStoragePolicy(key, _pool)));
   }
 
   // getOrAddMember(char*) const
@@ -207,7 +207,7 @@ class ObjectRef : public ObjectRefBase<CollectionData>,
   FORCE_INLINE VariantRef getOrAddMember(TChar* key) const {
     return VariantRef(_pool,
                       objectGetOrAddMember(_data, adaptString(key), _pool,
-                                           getStoragePolicy(key)));
+                                           getStoragePolicy(key, _pool)));
   }
 
   FORCE_INLINE bool operator==(ObjectRef rhs) const {

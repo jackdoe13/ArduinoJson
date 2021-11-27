@@ -8,7 +8,6 @@
 #include <ArduinoJson/Strings/StoragePolicy.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 inline bool variantEquals(const VariantData* a, const VariantData* b) {
@@ -41,7 +40,7 @@ inline VariantData* CollectionData::addMember(TAdaptedString key,
                                               MemoryPool* pool,
                                               TStoragePolicy storage) {
   VariantSlot* slot = addSlot(pool);
-  if (!slotSetKey(slot, key, pool, storage)) {
+  if (!slotSetKey(slot, key, storage)) {
     removeSlot(slot);
     return 0;
   }
@@ -66,7 +65,7 @@ inline bool CollectionData::copyFrom(const CollectionData& src,
     if (s->key() != 0) {
       if (s->ownsKey())
         var = addMember(adaptString(const_cast<char*>(s->key())), pool,
-                        storage_policies::store_by_copy());
+                        storage_policies::store_by_copy(pool));
       else
         var = addMember(adaptString(s->key()), pool,
                         storage_policies::store_by_address());

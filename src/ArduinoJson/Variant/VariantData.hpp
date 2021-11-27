@@ -321,13 +321,12 @@ class VariantData {
   };
 
   template <typename TAdaptedString, typename TStoragePolicy>
-  inline bool storeString(TAdaptedString value, MemoryPool *pool,
-                          TStoragePolicy storage) {
+  inline bool storeString(TAdaptedString value, TStoragePolicy storage) {
     if (value.isNull()) {
       setNull();
       return true;
     }
-    return storage.store(value, pool, VariantStringSetter(this));
+    return storage.store(value, VariantStringSetter(this));
   }
 
  private:

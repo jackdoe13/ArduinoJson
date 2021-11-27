@@ -8,7 +8,6 @@
 #include <ArduinoJson/Strings/StoragePolicy.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TVisitor>
@@ -53,10 +52,10 @@ inline void variantSetNull(VariantData *var) {
 
 template <typename TAdaptedString, typename TStoragePolicy>
 inline bool variantSetString(VariantData *var, TAdaptedString value,
-                             MemoryPool *pool, TStoragePolicy storage_policy) {
+                             TStoragePolicy storage_policy) {
   if (!var)
     return false;
-  return var->storeString(value, pool, storage_policy);
+  return var->storeString(value, storage_policy);
 }
 
 inline size_t variantSize(const VariantData *var) {
@@ -91,7 +90,8 @@ NO_INLINE VariantData *variantGetOrAddMember(VariantData *var, TChar *key,
                                              MemoryPool *pool) {
   if (!var)
     return 0;
-  return var->getOrAddMember(adaptString(key), pool, getStoragePolicy(key));
+  return var->getOrAddMember(adaptString(key), pool,
+                             getStoragePolicy(key, pool));
 }
 
 template <typename TString>
@@ -100,7 +100,8 @@ NO_INLINE VariantData *variantGetOrAddMember(VariantData *var,
                                              MemoryPool *pool) {
   if (!var)
     return 0;
-  return var->getOrAddMember(adaptString(key), pool, getStoragePolicy(key));
+  return var->getOrAddMember(adaptString(key), pool,
+                             getStoragePolicy(key, pool));
 }
 
 inline bool variantIsNull(const VariantData *var) {

@@ -25,9 +25,9 @@ struct SlotKeySetter {
 };
 
 template <typename TAdaptedString, typename TStoragePolicy>
-inline bool slotSetKey(VariantSlot* var, TAdaptedString key, MemoryPool* pool,
+inline bool slotSetKey(VariantSlot* var, TAdaptedString key,
                        TStoragePolicy storage) {
-  return storage.store(key, pool, SlotKeySetter(var));
+  return storage.store(key, SlotKeySetter(var));
 }
 
 inline size_t slotSize(const VariantSlot* var) {

@@ -12,7 +12,6 @@
 #include <ArduinoJson/Variant/VariantRef.hpp>
 #include <ArduinoJson/Variant/VariantTo.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 class JsonDocument : public Visitable {
@@ -246,16 +245,18 @@ class JsonDocument : public Visitable {
   // getOrAddMember(const __FlashStringHelper*)
   template <typename TChar>
   FORCE_INLINE VariantRef getOrAddMember(TChar* key) {
-    return VariantRef(&_pool, _data.getOrAddMember(adaptString(key), &_pool,
-                                                   getStoragePolicy(key)));
+    return VariantRef(&_pool,
+                      _data.getOrAddMember(adaptString(key), &_pool,
+                                           getStoragePolicy(key, &_pool)));
   }
 
   // getOrAddMember(const std::string&)
   // getOrAddMember(const String&)
   template <typename TString>
   FORCE_INLINE VariantRef getOrAddMember(const TString& key) {
-    return VariantRef(&_pool, _data.getOrAddMember(adaptString(key), &_pool,
-                                                   getStoragePolicy(key)));
+    return VariantRef(&_pool,
+                      _data.getOrAddMember(adaptString(key), &_pool,
+                                           getStoragePolicy(key, &_pool)));
   }
 
   FORCE_INLINE VariantRef addElement() {

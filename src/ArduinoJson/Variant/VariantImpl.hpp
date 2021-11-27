@@ -91,7 +91,7 @@ inline bool VariantData::copyFrom(const VariantData &src, MemoryPool *pool) {
       return storeString(
           adaptString(const_cast<char *>(src._content.asString.data),
                       src._content.asString.size),
-          pool, storage_policies::store_by_copy());
+          storage_policies::store_by_copy(pool));
     case VALUE_IS_OWNED_RAW:
       return storeOwnedRaw(
           serialized(src._content.asString.data, src._content.asString.size),
@@ -172,9 +172,8 @@ inline bool VariantRef::set(char value) const {
 // TODO: move somewhere else
 template <typename TAdaptedString, typename TCallback>
 bool storage_policies::store_by_copy::store(TAdaptedString str,
-                                            MemoryPool *pool,
                                             TCallback callback) {
-  const char *copy = pool->saveString(str);
+  const char *copy = _pool->saveString(str);
   return callback(CopiedString(copy, str.size()));
 }
 
