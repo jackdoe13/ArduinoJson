@@ -5,7 +5,9 @@
 #pragma once
 
 #include <ArduinoJson/Polyfills/attributes.hpp>
+#include <ArduinoJson/Strings/StoragePolicy.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
+
 
 namespace ARDUINOJSON_NAMESPACE {
 

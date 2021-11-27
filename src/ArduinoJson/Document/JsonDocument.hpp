@@ -8,8 +8,10 @@
 #include <ArduinoJson/Memory/MemoryPool.hpp>
 #include <ArduinoJson/Object/MemberProxy.hpp>
 #include <ArduinoJson/Object/ObjectRef.hpp>
+#include <ArduinoJson/Strings/StoragePolicy.hpp>
 #include <ArduinoJson/Variant/VariantRef.hpp>
 #include <ArduinoJson/Variant/VariantTo.hpp>
+
 
 namespace ARDUINOJSON_NAMESPACE {
 

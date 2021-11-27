@@ -81,6 +81,28 @@ inline String VariantData::asString() const {
   }
 }
 
+inline bool VariantData::copyFrom(const VariantData &src, MemoryPool *pool) {
+  switch (src.type()) {
+    case VALUE_IS_ARRAY:
+      return toArray().copyFrom(src._content.asCollection, pool);
+    case VALUE_IS_OBJECT:
+      return toObject().copyFrom(src._content.asCollection, pool);
+    case VALUE_IS_OWNED_STRING:
+      return storeString(
+          adaptString(const_cast<char *>(src._content.asString.data),
+                      src._content.asString.size),
+          pool, storage_policies::store_by_copy());
+    case VALUE_IS_OWNED_RAW:
+      return storeOwnedRaw(
+          serialized(src._content.asString.data, src._content.asString.size),
+          pool);
+    default:
+      setType(src.type());
+      _content = src._content;
+      return true;
+  }
+}
+
 template <typename T>
 inline typename enable_if<is_same<T, ArrayRef>::value, ArrayRef>::type
 VariantRef::to() const {
