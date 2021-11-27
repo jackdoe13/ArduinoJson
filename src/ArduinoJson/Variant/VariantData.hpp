@@ -323,39 +323,31 @@ class VariantData {
     return _flags & VALUE_MASK;
   }
 
-  template <typename TAdaptedString>
-  inline bool storeString(TAdaptedString value, MemoryPool *pool,
-                          storage_policies::decide_at_runtime storage_policy) {
-    if (storage_policy.store_by_address)
-      return storeString(value, pool, storage_policies::store_by_address());
-    else
-      return storeString(value, pool, storage_policies::store_by_copy());
-  }
+  struct VariantStringSetter {
+    VariantStringSetter(VariantData *instance) : _instance(instance) {}
 
-  template <typename TAdaptedString>
-  inline bool storeString(TAdaptedString value, MemoryPool *,
-                          storage_policies::store_by_address) {
-    if (value.isNull())
-      setNull();
-    else
-      setString(LinkedString(value.data(), value.size()));
-    return true;
-  }
+    template <typename TStoredString>
+    bool operator()(TStoredString s) {
+      if (s) {
+        _instance->setString(s);
+        return true;  // TODO: move return value in the storage policy class
+      } else {
+        _instance->setNull();
+        return false;
+      }
+    }
 
-  template <typename TAdaptedString>
+    VariantData *_instance;
+  };
+
+  template <typename TAdaptedString, typename TStoragePolicy>
   inline bool storeString(TAdaptedString value, MemoryPool *pool,
-                          storage_policies::store_by_copy) {
+                          TStoragePolicy storage) {
     if (value.isNull()) {
       setNull();
       return true;
     }
-    const char *copy = pool->saveString(value);
-    if (!copy) {
-      setNull();
-      return false;
-    }
-    setString(CopiedString(copy, value.size()));
-    return true;
+    return storage.store(value, pool, VariantStringSetter(this));
   }
 
  private:

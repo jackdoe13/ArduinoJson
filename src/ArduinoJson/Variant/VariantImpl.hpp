@@ -146,4 +146,14 @@ inline VariantConstRef operator|(VariantConstRef preferedValue,
 inline bool VariantRef::set(char value) const {
   return set<signed char>(value);
 }
+
+// TODO: move somewhere else
+template <typename TAdaptedString, typename TCallback>
+bool storage_policies::store_by_copy::store(TAdaptedString str,
+                                            MemoryPool *pool,
+                                            TCallback callback) {
+  const char *copy = pool->saveString(str);
+  return callback(CopiedString(copy, str.size()));
+}
+
 }  // namespace ARDUINOJSON_NAMESPACE
