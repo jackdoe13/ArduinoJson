@@ -8,6 +8,7 @@
 #include <ArduinoJson/Polyfills/assert.hpp>
 #include <ArduinoJson/Polyfills/mpl/max.hpp>
 #include <ArduinoJson/Strings/StringAdapters.hpp>
+#include <ArduinoJson/Strings/StringCompare.hpp>
 #include <ArduinoJson/Variant/VariantSlot.hpp>
 
 #include <string.h>  // memmove
@@ -166,21 +167,10 @@ class MemoryPool {
 
 #if ARDUINOJSON_ENABLE_STRING_DEDUPLICATION
   template <typename TAdaptedString>
-  static bool stringEquals(const char* p, size_t n, const TAdaptedString& s) {
-    if (p[n])  // check terminator first
-      return false;
-    for (size_t i = 0; i < n; i++) {
-      if (p[i] != s[i])
-        return false;
-    }
-    return true;
-  }
-
-  template <typename TAdaptedString>
   const char* findString(const TAdaptedString& str) const {
     size_t n = str.size();
     for (char* next = _begin; next + n < _left; ++next) {
-      if (stringEquals(next, n, str))
+      if (next[n] == '\0' && stringEquals(str, next, n))
         return next;
 
       // jump to next terminator

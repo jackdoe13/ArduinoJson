@@ -8,6 +8,7 @@
 #include <ArduinoJson/Misc/Visitable.hpp>
 #include <ArduinoJson/Numbers/arithmeticCompare.hpp>
 #include <ArduinoJson/Polyfills/type_traits.hpp>
+#include <ArduinoJson/Strings/StringCompare.hpp>
 #include <ArduinoJson/Variant/Visitor.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -26,8 +27,8 @@ struct Comparer<T, typename enable_if<IsString<T>::value>::type>
 
   explicit Comparer(T value) : rhs(value) {}
 
-  CompareResult visitString(const char *lhs, size_t) {
-    int i = adaptString(rhs).compare(lhs);
+  CompareResult visitString(const char *lhs, size_t n) {
+    int i = stringCompare(adaptString(rhs), lhs, n);
     if (i < 0)
       return COMPARE_RESULT_GREATER;
     else if (i > 0)

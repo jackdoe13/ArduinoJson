@@ -18,10 +18,6 @@ class RamStringAdapter {
   RamStringAdapter() : _str(0), _size(0) {}
   RamStringAdapter(const char* str, size_t sz) : _str(str), _size(sz) {}
 
-  int compare(const char* other) const {
-    return safe_strcmp(_str, other);
-  }
-
   bool isNull() const {
     return !_str;
   }

@@ -6,6 +6,7 @@
 
 #include <ArduinoJson/Collection/CollectionData.hpp>
 #include <ArduinoJson/Strings/StoragePolicy.hpp>
+#include <ArduinoJson/Strings/StringCompare.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
 
 
@@ -112,7 +113,7 @@ template <typename TAdaptedString>
 inline VariantSlot* CollectionData::getSlot(TAdaptedString key) const {
   VariantSlot* slot = _head;
   while (slot) {
-    if (key.compare(slot->key()) == 0)
+    if (stringEquals(key, slot->key()))
       break;
     slot = slot->next();
   }
