@@ -17,12 +17,6 @@ class FlashStringAdapter {
       : _str(str), _size(sz) {}
 
   int compare(const char* other) const {
-    if (!other && !_str)
-      return 0;
-    if (!_str)
-      return -1;
-    if (!other)
-      return 1;
     return -strncmp_P(other, reinterpret_cast<const char*>(_str), _size);
   }
 

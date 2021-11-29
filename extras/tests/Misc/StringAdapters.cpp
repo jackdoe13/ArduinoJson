@@ -19,16 +19,12 @@ TEST_CASE("const char*") {
   SECTION("null") {
     RamStringAdapter adapter = adaptString(static_cast<const char*>(0));
 
-    CHECK(adapter.compare("bravo") < 0);
-    CHECK(adapter.compare(NULL) == 0);
-
     CHECK(adapter.size() == 0);
   }
 
   SECTION("non-null") {
     RamStringAdapter adapter = adaptString("bravo");
 
-    CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
     CHECK(adapter.compare("bravo") == 0);
     CHECK(adapter.compare("charlie") < 0);
@@ -41,20 +37,18 @@ TEST_CASE("const char* + size") {
   SECTION("null") {
     RamStringAdapter adapter = adaptString(static_cast<const char*>(0), 10);
 
-    CHECK(adapter.compare("bravo") < 0);
-    CHECK(adapter.compare(NULL) == 0);
-
+    CHECK(adapter.isNull() == true);
     CHECK(adapter.size() == 10);
   }
 
   SECTION("non-null") {
     RamStringAdapter adapter = adaptString("bravo", 5);
 
-    CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
     CHECK(adapter.compare("bravo") == 0);
     CHECK(adapter.compare("charlie") < 0);
 
+    CHECK(adapter.isNull() == false);
     CHECK(adapter.size() == 5);
   }
 }
@@ -64,20 +58,18 @@ TEST_CASE("const __FlashStringHelper*") {
     FlashStringAdapter adapter =
         adaptString(static_cast<const __FlashStringHelper*>(0));
 
-    CHECK(adapter.compare("bravo") < 0);
-    CHECK(adapter.compare(NULL) == 0);
-
+    CHECK(adapter.isNull() == true);
     CHECK(adapter.size() == 0);
   }
 
   SECTION("non-null") {
     FlashStringAdapter adapter = adaptString(F("bravo"));
 
-    CHECK(adapter.compare(NULL) > 0);
     CHECK(adapter.compare("alpha") > 0);
     CHECK(adapter.compare("bravo") == 0);
     CHECK(adapter.compare("charlie") < 0);
 
+    CHECK(adapter.isNull() == false);
     CHECK(adapter.size() == 5);
   }
 }
@@ -86,11 +78,11 @@ TEST_CASE("std::string") {
   std::string str("bravo");
   RamStringAdapter adapter = adaptString(str);
 
-  CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);
   CHECK(adapter.compare("charlie") < 0);
 
+  CHECK(adapter.isNull() == false);
   CHECK(adapter.size() == 5);
 }
 
@@ -98,11 +90,11 @@ TEST_CASE("Arduino String") {
   ::String str("bravo");
   RamStringAdapter adapter = adaptString(str);
 
-  CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);
   CHECK(adapter.compare("charlie") < 0);
 
+  CHECK(adapter.isNull() == false);
   CHECK(adapter.size() == 5);
 }
 
@@ -110,11 +102,11 @@ TEST_CASE("custom_string") {
   custom_string str("bravo");
   RamStringAdapter adapter = adaptString(str);
 
-  CHECK(adapter.compare(NULL) > 0);
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);
   CHECK(adapter.compare("charlie") < 0);
 
+  CHECK(adapter.isNull() == false);
   CHECK(adapter.size() == 5);
 }
 

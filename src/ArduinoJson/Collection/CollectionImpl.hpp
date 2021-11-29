@@ -9,7 +9,6 @@
 #include <ArduinoJson/Strings/StringCompare.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 inline bool variantEquals(const VariantData* a, const VariantData* b) {
@@ -111,6 +110,8 @@ inline bool CollectionData::equalsArray(const CollectionData& other) const {
 
 template <typename TAdaptedString>
 inline VariantSlot* CollectionData::getSlot(TAdaptedString key) const {
+  if (key.isNull())
+    return 0;
   VariantSlot* slot = _head;
   while (slot) {
     if (stringEquals(key, slot->key()))

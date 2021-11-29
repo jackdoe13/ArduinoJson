@@ -11,10 +11,8 @@ namespace ARDUINOJSON_NAMESPACE {
 // TODO: test in isolation
 template <typename TAdaptedString>
 bool stringEquals(TAdaptedString a, const char* b, size_t n) {
-  if (a.isNull() && !b)  // TODO: replace with assert
-    return true;
-  if (a.isNull() || !b)  // TODO: replace with assert
-    return false;
+  ARDUINOJSON_ASSERT(!a.isNull());
+  ARDUINOJSON_ASSERT(b != 0);
   if (a.size() != n)
     return false;
   for (size_t i = 0; i < n; i++) {
@@ -27,18 +25,15 @@ bool stringEquals(TAdaptedString a, const char* b, size_t n) {
 template <typename TAdaptedString>
 bool stringEquals(TAdaptedString a, const char* b) {
   // TODO: implement a second version
+  ARDUINOJSON_ASSERT(b != 0);
   return stringEquals(a, b, strlen(b));
 }
 
 // TODO: test in isolation
 template <typename TAdaptedString>
 int stringCompare(TAdaptedString a, const char* b, size_t blen) {
-  if (a.isNull() && !b)  // TODO: replace with assert
-    return 0;
-  if (a.isNull())  // TODO: replace with assert
-    return -1;
-  if (!b)  // TODO: replace with assert
-    return 1;
+  ARDUINOJSON_ASSERT(!a.isNull());
+  ARDUINOJSON_ASSERT(b != 0);
   size_t alen = a.size();
   size_t n = alen < blen ? alen : blen;
   for (size_t i = 0; i < n; i++) {
