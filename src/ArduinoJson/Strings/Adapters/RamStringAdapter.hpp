@@ -50,9 +50,6 @@ class RamStringAdapter {
 };
 
 template <>
-struct IsString<const char*> : true_type {};
-
-template <>
 struct IsString<char*> : true_type {};
 
 inline RamStringAdapter adaptString(const char* s) {
