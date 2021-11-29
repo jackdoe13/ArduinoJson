@@ -24,9 +24,16 @@ bool stringEquals(TAdaptedString a, const char* b, size_t n) {
 
 template <typename TAdaptedString>
 bool stringEquals(TAdaptedString a, const char* b) {
-  // TODO: implement a second version
+  ARDUINOJSON_ASSERT(!a.isNull());
   ARDUINOJSON_ASSERT(b != 0);
-  return stringEquals(a, b, strlen(b));
+  size_t n = a.size();
+  for (size_t i = 0; i < n; i++) {
+    if (b[i] == 0)
+      return false;
+    if (a[i] != b[i])
+      return false;
+  }
+  return b[n] == 0;
 }
 
 // TODO: test in isolation
