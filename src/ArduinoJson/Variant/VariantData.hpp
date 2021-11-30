@@ -307,14 +307,11 @@ class VariantData {
     VariantStringSetter(VariantData *instance) : _instance(instance) {}
 
     template <typename TStoredString>
-    bool operator()(TStoredString s) {
-      if (s) {
+    void operator()(TStoredString s) {
+      if (s)
         _instance->setString(s);
-        return true;  // TODO: move return value in the storage policy class
-      } else {
+      else
         _instance->setNull();
-        return false;
-      }
     }
 
     VariantData *_instance;

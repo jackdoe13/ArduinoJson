@@ -13,12 +13,11 @@ struct SlotKeySetter {
   SlotKeySetter(VariantSlot* instance) : _instance(instance) {}
 
   template <typename TStoredString>
-  bool operator()(TStoredString s) {
+  void operator()(TStoredString s) {
     if (!s)
-      return false;
+      return;
     ARDUINOJSON_ASSERT(_instance != 0);
     _instance->setKey(s);
-    return true;
   }
 
   VariantSlot* _instance;

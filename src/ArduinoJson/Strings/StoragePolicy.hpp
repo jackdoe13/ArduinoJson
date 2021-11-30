@@ -14,7 +14,9 @@ namespace storage_policies {
 struct store_by_address {
   template <typename TAdaptedString, typename TCallback>
   bool store(TAdaptedString str, MemoryPool *, TCallback callback) {
-    return callback(LinkedString(str.data(), str.size()));
+    LinkedString storedString(str.data(), str.size());
+    callback(storedString);
+    return bool(storedString);
   }
 };
 
