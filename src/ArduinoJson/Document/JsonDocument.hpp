@@ -12,7 +12,6 @@
 #include <ArduinoJson/Variant/VariantRef.hpp>
 #include <ArduinoJson/Variant/VariantTo.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 class JsonDocument : public Visitable {

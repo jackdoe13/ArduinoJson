@@ -8,7 +8,6 @@
 #include <ArduinoJson/Strings/StoragePolicy.hpp>
 #include <ArduinoJson/Variant/VariantData.hpp>
 
-
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TVisitor>
