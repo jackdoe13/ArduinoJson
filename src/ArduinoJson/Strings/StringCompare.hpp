@@ -36,7 +36,7 @@ bool stringEquals(TAdaptedString a, const char* b) {
   return b[n] == 0;
 }
 
-inline bool stringEquals(ZeroTerminatedRamStringAdapter a, const char* b) {
+inline bool stringEquals(ZeroTerminatedRamString a, const char* b) {
   ARDUINOJSON_ASSERT(!a.isNull());
   ARDUINOJSON_ASSERT(b != 0);
   return ::strcmp(a.data(), b) == 0;

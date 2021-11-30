@@ -4,21 +4,21 @@
 
 #pragma once
 
-#include <ArduinoJson/Strings/Adapters/JsonStringAdapter.hpp>
-#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/JsonString.hpp>
+#include <ArduinoJson/Strings/Adapters/RamString.hpp>
 
 #if ARDUINOJSON_ENABLE_STD_STRING
-#  include <ArduinoJson/Strings/Adapters/StdStringAdapter.hpp>
+#  include <ArduinoJson/Strings/Adapters/StdString.hpp>
 #endif
 
 #if ARDUINOJSON_ENABLE_STRING_VIEW
-#  include <ArduinoJson/Strings/Adapters/StringViewAdapter.hpp>
+#  include <ArduinoJson/Strings/Adapters/StringView.hpp>
 #endif
 
 #if ARDUINOJSON_ENABLE_ARDUINO_STRING
-#  include <ArduinoJson/Strings/Adapters/ArduinoStringAdapter.hpp>
+#  include <ArduinoJson/Strings/Adapters/ArduinoString.hpp>
 #endif
 
 #if ARDUINOJSON_ENABLE_PROGMEM
-#  include <ArduinoJson/Strings/Adapters/FlashStringAdapter.hpp>
+#  include <ArduinoJson/Strings/Adapters/FlashString.hpp>
 #endif

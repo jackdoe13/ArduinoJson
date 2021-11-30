@@ -18,100 +18,98 @@ using namespace ARDUINOJSON_NAMESPACE;
 
 TEST_CASE("const char*") {
   SECTION("null") {
-    ZeroTerminatedRamStringAdapter adapter =
-        adaptString(static_cast<const char*>(0));
+    ZeroTerminatedRamString s = adaptString(static_cast<const char*>(0));
 
-    CHECK(adapter.isNull() == true);
-    CHECK(adapter.size() == 0);
+    CHECK(s.isNull() == true);
+    CHECK(s.size() == 0);
   }
 
   SECTION("non-null") {
-    ZeroTerminatedRamStringAdapter adapter = adaptString("bravo");
+    ZeroTerminatedRamString s = adaptString("bravo");
 
-    CHECK(stringCompare(adapter, "alpha", 5) > 0);
-    CHECK(stringCompare(adapter, "bravo", 5) == 0);
-    CHECK(stringCompare(adapter, "charlie", 7) < 0);
+    CHECK(stringCompare(s, "alpha", 5) > 0);
+    CHECK(stringCompare(s, "bravo", 5) == 0);
+    CHECK(stringCompare(s, "charlie", 7) < 0);
 
-    CHECK(adapter.isNull() == false);
-    CHECK(adapter.size() == 5);
+    CHECK(s.isNull() == false);
+    CHECK(s.size() == 5);
   }
 }
 
 TEST_CASE("const char* + size") {
   SECTION("null") {
-    SizedRamStringAdapter adapter =
-        adaptString(static_cast<const char*>(0), 10);
+    SizedRamString s = adaptString(static_cast<const char*>(0), 10);
 
-    CHECK(adapter.isNull() == true);
+    CHECK(s.isNull() == true);
   }
 
   SECTION("non-null") {
-    SizedRamStringAdapter adapter = adaptString("bravo", 5);
+    SizedRamString s = adaptString("bravo", 5);
 
-    CHECK(stringCompare(adapter, "alpha", 5) > 0);
-    CHECK(stringCompare(adapter, "bravo", 5) == 0);
-    CHECK(stringCompare(adapter, "charlie", 7) < 0);
+    CHECK(stringCompare(s, "alpha", 5) > 0);
+    CHECK(stringCompare(s, "bravo", 5) == 0);
+    CHECK(stringCompare(s, "charlie", 7) < 0);
 
-    CHECK(adapter.isNull() == false);
-    CHECK(adapter.size() == 5);
+    CHECK(s.isNull() == false);
+    CHECK(s.size() == 5);
   }
 }
 
 TEST_CASE("const __FlashStringHelper*") {
   SECTION("null") {
-    FlashStringAdapter adapter =
+    FlashStringAdapter s =
         adaptString(static_cast<const __FlashStringHelper*>(0));
 
-    CHECK(adapter.isNull() == true);
-    CHECK(adapter.size() == 0);
+    CHECK(s.isNull() == true);
+    CHECK(s.size() == 0);
   }
 
   SECTION("non-null") {
-    FlashStringAdapter adapter = adaptString(F("bravo"));
+    FlashStringAdapter s = adaptString(F("bravo"));
 
-    CHECK(stringCompare(adapter, "alpha", 5) > 0);
-    CHECK(stringCompare(adapter, "bravo", 5) == 0);
-    CHECK(stringCompare(adapter, "charlie", 7) < 0);
+    CHECK(stringCompare(s, "alpha", 5) > 0);
+    CHECK(stringCompare(s, "bravo", 5) == 0);
+    CHECK(stringCompare(s, "charlie", 7) < 0);
 
-    CHECK(adapter.isNull() == false);
-    CHECK(adapter.size() == 5);
+    CHECK(s.isNull() == false);
+    CHECK(s.size() == 5);
   }
 }
 
 TEST_CASE("std::string") {
-  std::string str("bravo");
-  SizedRamStringAdapter adapter = adaptString(str);
+  std::string orig("bravo");
+  SizedRamString s = adaptString(orig);
 
-  CHECK(stringCompare(adapter, "alpha", 5) > 0);
-  CHECK(stringCompare(adapter, "bravo", 5) == 0);
-  CHECK(stringCompare(adapter, "charlie", 7) < 0);
+  CHECK(stringCompare(s, "alpha", 5) > 0);
+  CHECK(stringCompare(s, "bravo", 5) == 0);
+  CHECK(stringCompare(s, "charlie", 7) < 0);
 
-  CHECK(adapter.isNull() == false);
-  CHECK(adapter.size() == 5);
+  CHECK(s.isNull() == false);
+  CHECK(s.size() == 5);
 }
 
 TEST_CASE("Arduino String") {
-  ::String str("bravo");
-  SizedRamStringAdapter adapter = adaptString(str);
+  ::String orig("bravo");
+  SizedRamString s = adaptString(orig);
 
-  CHECK(stringCompare(adapter, "alpha", 5) > 0);
-  CHECK(stringCompare(adapter, "bravo", 5) == 0);
-  CHECK(stringCompare(adapter, "charlie", 7) < 0);
+  CHECK(stringCompare(s, "alpha", 5) > 0);
+  CHECK(stringCompare(s, "bravo", 5) == 0);
+  CHECK(stringCompare(s, "charlie", 7) < 0);
 
-  CHECK(adapter.isNull() == false);
-  CHECK(adapter.size() == 5);
+  CHECK(s.isNull() == false);
+  CHECK(s.size() == 5);
 }
 
 TEST_CASE("custom_string") {
-  custom_string str("bravo");
-  SizedRamStringAdapter adapter = adaptString(str);
+  custom_string orig("bravo");
+  SizedRamString s = adaptString(orig);
 
-  CHECK(stringCompare(adapter, "alpha", 5) > 0);
-  CHECK(stringCompare(adapter, "bravo", 5) == 0);
-  CHECK(stringCompare(adapter, "charlie", 7) < 0);
+  CHECK(stringCompare(s, "alpha", 5) > 0);
+  CHECK(stringCompare(s, "bravo", 5) == 0);
+  CHECK(stringCompare(s, "charlie", 7) < 0);
 
-  CHECK(adapter.isNull() == false);
-  CHECK(adapter.size() == 5);
+  CHECK(s.isNull() == false);
+  CHECK(s.size() == 5);
 }
 
 TEST_CASE("IsString<T>") {

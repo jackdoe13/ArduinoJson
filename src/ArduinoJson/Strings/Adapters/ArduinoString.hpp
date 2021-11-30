@@ -6,13 +6,13 @@
 
 #include <Arduino.h>
 
-#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/RamString.hpp>
 #include <ArduinoJson/Strings/IsString.hpp>
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline SizedRamStringAdapter adaptString(const ::String& s) {
-  return SizedRamStringAdapter(s.c_str(), s.length());
+inline SizedRamString adaptString(const ::String& s) {
+  return SizedRamString(s.c_str(), s.length());
 }
 
 template <>

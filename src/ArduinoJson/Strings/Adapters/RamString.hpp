@@ -13,9 +13,9 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class ZeroTerminatedRamStringAdapter {
+class ZeroTerminatedRamString {
  public:
-  ZeroTerminatedRamStringAdapter(const char* str) : _str(str) {}
+  ZeroTerminatedRamString(const char* str) : _str(str) {}
 
   bool isNull() const {
     return !_str;
@@ -39,9 +39,9 @@ class ZeroTerminatedRamStringAdapter {
   const char* _str;
 };
 
-class SizedRamStringAdapter {
+class SizedRamString {
  public:
-  SizedRamStringAdapter(const char* str, size_t sz) : _str(str), _size(sz) {}
+  SizedRamString(const char* str, size_t sz) : _str(str), _size(sz) {}
 
   bool isNull() const {
     return !_str;
@@ -69,12 +69,12 @@ class SizedRamStringAdapter {
 template <>
 struct IsString<char*> : true_type {};
 
-inline ZeroTerminatedRamStringAdapter adaptString(const char* s) {
-  return ZeroTerminatedRamStringAdapter(s);
+inline ZeroTerminatedRamString adaptString(const char* s) {
+  return ZeroTerminatedRamString(s);
 }
 
-inline SizedRamStringAdapter adaptString(const char* s, size_t n) {
-  return SizedRamStringAdapter(s, n);
+inline SizedRamString adaptString(const char* s, size_t n) {
+  return SizedRamString(s, n);
 }
 
 template <int N>
@@ -84,21 +84,21 @@ template <int N>
 struct IsString<const char[N]> : true_type {};
 
 template <int N>
-inline SizedRamStringAdapter adaptString(char s[N]) {
-  return SizedRamStringAdapter(s, strlen(s));
+inline SizedRamString adaptString(char s[N]) {
+  return SizedRamString(s, strlen(s));
 }
 
 template <>
 struct IsString<unsigned char*> : true_type {};
 
-inline ZeroTerminatedRamStringAdapter adaptString(const unsigned char* s) {
+inline ZeroTerminatedRamString adaptString(const unsigned char* s) {
   return adaptString(reinterpret_cast<const char*>(s));
 }
 
 template <>
 struct IsString<signed char*> : true_type {};
 
-inline ZeroTerminatedRamStringAdapter adaptString(const signed char* s) {
+inline ZeroTerminatedRamString adaptString(const signed char* s) {
   return adaptString(reinterpret_cast<const char*>(s));
 }
 }  // namespace ARDUINOJSON_NAMESPACE

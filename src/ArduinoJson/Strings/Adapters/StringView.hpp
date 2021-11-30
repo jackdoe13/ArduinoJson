@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/RamString.hpp>
 
 #include <string_view>
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline SizedRamStringAdapter adaptString(const std::string_view& s) {
-  return SizedRamStringAdapter(s.data(), s.size());
+inline SizedRamString adaptString(const std::string_view& s) {
+  return SizedRamString(s.data(), s.size());
 }
 
 template <>

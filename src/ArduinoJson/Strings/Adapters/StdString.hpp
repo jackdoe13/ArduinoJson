@@ -4,16 +4,16 @@
 
 #pragma once
 
-#include <ArduinoJson/Strings/Adapters/RamStringAdapter.hpp>
+#include <ArduinoJson/Strings/Adapters/RamString.hpp>
 
 #include <string>
 
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TCharTraits, typename TAllocator>
-inline SizedRamStringAdapter adaptString(
+inline SizedRamString adaptString(
     const std::basic_string<char, TCharTraits, TAllocator>& s) {
-  return SizedRamStringAdapter(s.c_str(), s.size());
+  return SizedRamString(s.c_str(), s.size());
 }
 
 template <typename TCharTraits, typename TAllocator>
