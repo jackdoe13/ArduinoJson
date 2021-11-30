@@ -66,7 +66,7 @@ class MemoryPool {
   }
 
   template <typename TAdaptedString>
-  const char* saveString(const TAdaptedString& str) {  // TODO: take by copy
+  const char* saveString(TAdaptedString str) {
     if (str.isNull())
       return CopiedString();
 
