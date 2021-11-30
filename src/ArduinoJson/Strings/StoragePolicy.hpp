@@ -11,11 +11,9 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 namespace storage_policies {
-// TODO: memory pool as a member?
 struct store_by_address {
   template <typename TAdaptedString, typename TCallback>
-  bool store(TAdaptedString str, MemoryPool *,
-             TCallback callback) {  // TODO: test pass by ref
+  bool store(TAdaptedString str, MemoryPool *, TCallback callback) {
     return callback(LinkedString(str.data(), str.size()));
   }
 };
@@ -32,8 +30,7 @@ struct decide_at_runtime : private store_by_address, store_by_copy {
   bool store_by_address;
 
   template <typename TAdaptedString, typename TCallback>
-  bool store(TAdaptedString str, MemoryPool *pool,
-             TCallback callback) {  // TODO: test pass by ref
+  bool store(TAdaptedString str, MemoryPool *pool, TCallback callback) {
     if (store_by_address)
       return store_by_address::store(str, pool, callback);
     else
