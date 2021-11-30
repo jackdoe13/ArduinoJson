@@ -36,6 +36,12 @@ bool stringEquals(TAdaptedString a, const char* b) {
   return b[n] == 0;
 }
 
+inline bool stringEquals(ZeroTerminatedRamStringAdapter a, const char* b) {
+  ARDUINOJSON_ASSERT(!a.isNull());
+  ARDUINOJSON_ASSERT(b != 0);
+  return ::strcmp(a.data(), b) == 0;
+}
+
 // TODO: test in isolation
 template <typename TAdaptedString>
 int stringCompare(TAdaptedString a, const char* b, size_t blen) {

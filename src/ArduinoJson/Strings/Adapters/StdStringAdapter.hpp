@@ -11,9 +11,9 @@
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TCharTraits, typename TAllocator>
-inline RamStringAdapter adaptString(
+inline SizedRamStringAdapter adaptString(
     const std::basic_string<char, TCharTraits, TAllocator>& s) {
-  return RamStringAdapter(s.c_str(), s.size());
+  return SizedRamStringAdapter(s.c_str(), s.size());
 }
 
 template <typename TCharTraits, typename TAllocator>

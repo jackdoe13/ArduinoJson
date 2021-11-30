@@ -17,13 +17,14 @@ using namespace ARDUINOJSON_NAMESPACE;
 
 TEST_CASE("const char*") {
   SECTION("null") {
-    RamStringAdapter adapter = adaptString(static_cast<const char*>(0));
+    ZeroTerminatedRamStringAdapter adapter =
+        adaptString(static_cast<const char*>(0));
 
     CHECK(adapter.size() == 0);
   }
 
   SECTION("non-null") {
-    RamStringAdapter adapter = adaptString("bravo");
+    ZeroTerminatedRamStringAdapter adapter = adaptString("bravo");
 
     CHECK(adapter.compare("alpha") > 0);
     CHECK(adapter.compare("bravo") == 0);
@@ -35,14 +36,15 @@ TEST_CASE("const char*") {
 
 TEST_CASE("const char* + size") {
   SECTION("null") {
-    RamStringAdapter adapter = adaptString(static_cast<const char*>(0), 10);
+    SizedRamStringAdapter adapter =
+        adaptString(static_cast<const char*>(0), 10);
 
     CHECK(adapter.isNull() == true);
     CHECK(adapter.size() == 10);
   }
 
   SECTION("non-null") {
-    RamStringAdapter adapter = adaptString("bravo", 5);
+    SizedRamStringAdapter adapter = adaptString("bravo", 5);
 
     CHECK(adapter.compare("alpha") > 0);
     CHECK(adapter.compare("bravo") == 0);
@@ -76,7 +78,7 @@ TEST_CASE("const __FlashStringHelper*") {
 
 TEST_CASE("std::string") {
   std::string str("bravo");
-  RamStringAdapter adapter = adaptString(str);
+  SizedRamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);
@@ -88,7 +90,7 @@ TEST_CASE("std::string") {
 
 TEST_CASE("Arduino String") {
   ::String str("bravo");
-  RamStringAdapter adapter = adaptString(str);
+  SizedRamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);
@@ -100,7 +102,7 @@ TEST_CASE("Arduino String") {
 
 TEST_CASE("custom_string") {
   custom_string str("bravo");
-  RamStringAdapter adapter = adaptString(str);
+  SizedRamStringAdapter adapter = adaptString(str);
 
   CHECK(adapter.compare("alpha") > 0);
   CHECK(adapter.compare("bravo") == 0);

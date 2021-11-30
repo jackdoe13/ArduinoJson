@@ -13,10 +13,39 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class RamStringAdapter {
+class ZeroTerminatedRamStringAdapter {
  public:
-  RamStringAdapter() : _str(0), _size(0) {}
-  RamStringAdapter(const char* str, size_t sz) : _str(str), _size(sz) {}
+  ZeroTerminatedRamStringAdapter(const char* str) : _str(str) {}
+
+  bool isNull() const {
+    return !_str;
+  }
+
+  size_t size() const {
+    return ::strlen(_str);
+  }
+
+  char operator[](size_t i) const {
+    ARDUINOJSON_ASSERT(_str != 0);
+    ARDUINOJSON_ASSERT(i <= size());
+    return _str[i];
+  }
+
+  const char* data() const {
+    return _str;
+  }
+
+  void copyTo(char* p, size_t n) const {
+    memcpy(p, _str, n);
+  }
+
+ protected:
+  const char* _str;
+};
+
+class SizedRamStringAdapter {
+ public:
+  SizedRamStringAdapter(const char* str, size_t sz) : _str(str), _size(sz) {}
 
   bool isNull() const {
     return !_str;
@@ -48,12 +77,12 @@ class RamStringAdapter {
 template <>
 struct IsString<char*> : true_type {};
 
-inline RamStringAdapter adaptString(const char* s) {
-  return RamStringAdapter(s, s ? strlen(s) : 0);
+inline ZeroTerminatedRamStringAdapter adaptString(const char* s) {
+  return ZeroTerminatedRamStringAdapter(s);
 }
 
-inline RamStringAdapter adaptString(const char* s, size_t n) {
-  return RamStringAdapter(s, n);
+inline SizedRamStringAdapter adaptString(const char* s, size_t n) {
+  return SizedRamStringAdapter(s, n);
 }
 
 template <int N>
@@ -63,21 +92,21 @@ template <int N>
 struct IsString<const char[N]> : true_type {};
 
 template <int N>
-inline RamStringAdapter adaptString(char s[N]) {
-  return RamStringAdapter(s, strlen(s));
+inline SizedRamStringAdapter adaptString(char s[N]) {
+  return SizedRamStringAdapter(s, strlen(s));
 }
 
 template <>
 struct IsString<unsigned char*> : true_type {};
 
-inline RamStringAdapter adaptString(const unsigned char* s) {
+inline ZeroTerminatedRamStringAdapter adaptString(const unsigned char* s) {
   return adaptString(reinterpret_cast<const char*>(s));
 }
 
 template <>
 struct IsString<signed char*> : true_type {};
 
-inline RamStringAdapter adaptString(const signed char* s) {
+inline ZeroTerminatedRamStringAdapter adaptString(const signed char* s) {
   return adaptString(reinterpret_cast<const char*>(s));
 }
 }  // namespace ARDUINOJSON_NAMESPACE
