@@ -60,6 +60,7 @@ class MemoryPool {
     return allocRight<VariantSlot>();
   }
 
+  // TODO: move
   template <typename TAdaptedString>
   static void copyString(TAdaptedString str, char* p, size_t n) {
     for (size_t i = 0; i < n; i++) p[i] = str[i];

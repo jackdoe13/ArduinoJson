@@ -22,7 +22,7 @@ class ZeroTerminatedRamStringAdapter {
   }
 
   size_t size() const {
-    return ::strlen(_str);
+    return _str ? ::strlen(_str) : 0;
   }
 
   char operator[](size_t i) const {

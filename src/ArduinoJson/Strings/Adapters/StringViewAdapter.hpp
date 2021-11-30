@@ -10,8 +10,8 @@
 
 namespace ARDUINOJSON_NAMESPACE {
 
-inline RamStringAdapter adaptString(const std::string_view& s) {
-  return RamStringAdapter(s.data(), s.size());
+inline SizedRamStringAdapter adaptString(const std::string_view& s) {
+  return SizedRamStringAdapter(s.data(), s.size());
 }
 
 template <>

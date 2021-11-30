@@ -16,7 +16,7 @@ class FlashStringAdapter {
   FlashStringAdapter(const __FlashStringHelper* str, size_t sz)
       : _str(str), _size(sz) {}
 
-  int compare(const char* other) const {
+  int compare(const char* other) const {  // TODO: remove?
     return -strncmp_P(other, reinterpret_cast<const char*>(_str), _size);
   }
 
