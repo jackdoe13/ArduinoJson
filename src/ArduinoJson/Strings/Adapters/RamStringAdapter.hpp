@@ -35,10 +35,6 @@ class ZeroTerminatedRamStringAdapter {
     return _str;
   }
 
-  void copyTo(char* p, size_t n) const {
-    memcpy(p, _str, n);
-  }
-
  protected:
   const char* _str;
 };
@@ -63,10 +59,6 @@ class SizedRamStringAdapter {
 
   const char* data() const {
     return _str;
-  }
-
-  void copyTo(char* p, size_t n) const {
-    memcpy(p, _str, n);
   }
 
  protected:

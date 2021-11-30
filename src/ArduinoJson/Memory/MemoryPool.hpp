@@ -61,7 +61,12 @@ class MemoryPool {
   }
 
   template <typename TAdaptedString>
-  const char* saveString(const TAdaptedString& str) {
+  static void copyString(TAdaptedString str, char* p, size_t n) {
+    for (size_t i = 0; i < n; i++) p[i] = str[i];
+  }
+
+  template <typename TAdaptedString>
+  const char* saveString(const TAdaptedString& str) {  // TODO: take by copy
     if (str.isNull())
       return CopiedString();
 
@@ -75,7 +80,7 @@ class MemoryPool {
 
     char* newCopy = allocString(n + 1);
     if (newCopy) {
-      str.copyTo(newCopy, n);
+      copyString(str, newCopy, n);
       newCopy[n] = 0;  // force null-terminator
     }
     return CopiedString(newCopy, n);

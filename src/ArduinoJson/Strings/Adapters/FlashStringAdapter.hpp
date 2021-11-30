@@ -24,10 +24,6 @@ class FlashStringAdapter {
     return !_str;
   }
 
-  void copyTo(char* p, size_t n) const {
-    memcpy_P(p, reinterpret_cast<const char*>(_str), n);
-  }
-
   char operator[](size_t i) const {
     ARDUINOJSON_ASSERT(_str != 0);
     ARDUINOJSON_ASSERT(i <= _size);
