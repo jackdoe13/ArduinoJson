@@ -16,7 +16,7 @@ struct store_by_address {
   bool store(TAdaptedString str, MemoryPool *, TCallback callback) {
     LinkedString storedString(str.data(), str.size());
     callback(storedString);
-    return bool(storedString);
+    return !str.isNull();
   }
 };
 

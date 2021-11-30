@@ -177,7 +177,7 @@ bool storage_policies::store_by_copy::store(TAdaptedString str,
   const char *copy = pool->saveString(str);
   CopiedString storedString(copy, str.size());
   callback(storedString);
-  return bool(storedString);
+  return copy != 0;
 }
 
 }  // namespace ARDUINOJSON_NAMESPACE
